@@ -1,0 +1,53 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Tarea Según el Día') {
+            steps {
+                script {
+                    def currentDate = new Date()
+                    def dayOfWeek = currentDate.format('EEEE') // Obtener el día de la semana
+                    
+                    echo "Hoy es ${dayOfWeek}"
+                    
+                    switch (dayOfWeek) {
+                        case 'Monday':
+                            echo "Fecha actual: ${currentDate}"
+                            break
+                        case 'Tuesday':
+                            stage("Clonar Repositorio") {
+                                steps {
+                                    git url: 'https://github.com/Arenas15/Jenkins_Ejercicio2.git'
+                                }
+                            }
+                            break
+                        case 'Wednesday':
+                            def numero1 = 10
+                            def numero2 = 5
+                            
+                            def suma = numero1 + numero2
+                            def resta = numero1 - numero2
+                            def multiplicacion = numero1 * numero2
+                            def division = numero2 != 0 ? numero1 / numero2 : "No se puede dividir por cero"
+                            
+                            echo "Suma: ${suma}"
+                            echo "Resta: ${resta}"
+                            echo "División: ${division}"
+                            echo "Multiplicación: ${multiplicacion}"
+                            break
+                        case 'Thursday':
+                            bat 'ipconfig /flushdns'
+                            break
+                        case 'Friday':
+                            def archivoLunes = readFile 'C:/Users/jarenasm/Desktop/Jenkins Ejercicios/ArchivoSemanal.txt'
+                            writeFile file: 'C:/Users/jarenasm/Desktop/Jenkins Ejercicios/informacionLunes.txt', text: archivoLunes
+                            break
+                        default:
+                            echo "No hay tareas programadas para el fin de semana."
+                            break
+                    }
+                }
+            }
+        }
+    }
+}
